@@ -56,7 +56,7 @@ Savings entries can include:
 
 ```json
 {
-  "item": "BTC",
+  "item": "Cash ISA",
   "amount": 50,
   "currentValue": 2376.08,
   "asOf": "2026-03-12"
