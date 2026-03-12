@@ -1,5 +1,7 @@
 # Finance Dashboard
 
+Live app: https://jack-coutts.github.io/personal_finance/
+
 A private, browser-based finance dashboard for tracking monthly income, bills, other payments, and savings or investments.
 
 It runs entirely in a single HTML file with no backend, no account system, and no automatic persistence.
@@ -29,7 +31,7 @@ Data only exists in memory while the page is open, unless the user exports it.
 ## Usage
 
 1. Open `index.html` in a browser
-2. Choose `Start Fresh` or import an existing JSON file
+2. Choose `Start Fresh` or import an existing JSON file such as `example.json`
 3. Update the dashboard
 4. Export JSON to save changes
 5. Use Print to export a PDF snapshot
@@ -66,7 +68,7 @@ Savings entries can include:
 This project can be hosted as a static site with GitHub Pages.
 
 1. Create a repository on GitHub
-2. Upload `index.html` and `README.md`
+2. Upload `index.html`, `example.json`, `README.md`, and `LICENSE`
 3. Open `Settings` -> `Pages`
 4. Under `Build and deployment`, choose `Deploy from a branch`
 5. Select `main` and `/ (root)`
@@ -79,4 +81,6 @@ GitHub will publish the site at:
 ## Project Files
 
 - `index.html` - the full application
+- `example.json` - sample finance data
 - `README.md` - project overview and usage
+- `LICENSE` - GNU GPL v3

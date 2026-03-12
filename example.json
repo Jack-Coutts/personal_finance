@@ -1,0 +1,26 @@
+{
+  "income": [
+    { "item": "Studio Salary", "amount": 3180, "day": 28 },
+    { "item": "Freelance Design", "amount": 420, "day": 12 }
+  ],
+  "other": [
+    { "item": "Family Support", "amount": 250, "day": 5 },
+    { "item": "Car Loan", "amount": 180, "day": 14 }
+  ],
+  "bills": [
+    { "item": "Rent", "amount": 1250, "day": 1 },
+    { "item": "Electricity", "amount": 74, "day": 9 },
+    { "item": "Water", "amount": 31, "day": 9 },
+    { "item": "Internet", "amount": 39, "day": 11 },
+    { "item": "Phone", "amount": 18, "day": 11 },
+    { "item": "Gym", "amount": 42, "day": 3 },
+    { "item": "Streaming", "amount": 21, "day": 16 },
+    { "item": "Groceries", "amount": 340, "day": 27 }
+  ],
+  "savings": [
+    { "item": "Emergency Fund", "amount": 300, "currentValue": 8600, "asOf": "2026-03-10" },
+    { "item": "Global Index Fund", "amount": 250, "currentValue": 12420.55, "asOf": "2026-03-12" },
+    { "item": "BTC", "amount": 75, "currentValue": 1840.2, "asOf": "2026-03-12" }
+  ],
+  "asOf": "2026-03-12"
+}
