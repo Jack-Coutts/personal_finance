@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --bg: #f8f9fa;
+            --surface: #ffffff;
+            --text: #212529;
+            --text-muted: #6c757d;
+            --border: #dee2e6;
+            --primary: #0d6efd;
+            --success: #198754;
+            --danger: #dc3545;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+        
+        .container { max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
+        
+        header { text-align: center; margin-bottom: 40px; }
+        
+        h1 { font-size: 24px; font-weight: 500; color: var(--text); margin-bottom: 4px; letter-spacing: -0.3px; }
+        
+        .subtitle { color: var(--text-muted); font-size: 14px; }
+        
+        .upload-section {
+            background: var(--surface);
+            border-radius: 8px;
+            padding: 48px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+        
+        .upload-section input[type="file"] { display: none; }
+        
+        .upload-btn {
+            background: var(--text);
+            color: var(--surface);
+            border: none;
+            padding: 12px 28px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        
+        .upload-btn:hover { opacity: 0.85; }
+
+        .upload-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .file-info { margin-top: 12px; font-size: 13px; color: var(--text-muted); }
+        
+        .dashboard { display: none; }
+        .dashboard.active { display: block; }
+        
+        .actions {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 32px;
+            align-items: center;
+        }
+        
+        .btn {
+            background: var(--surface);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .btn:hover { background: var(--bg); border-color: var(--text-muted); }
+        
+        .btn--primary { background: var(--success); color: white; border-color: var(--success); }
+        .btn--primary:hover { background: #157347; border-color: #157347; }
+        
+        .btn--sm { padding: 6px 12px; font-size: 12px; }
+        
+        .btn--text { background: none; border: none; color: var(--text-muted); padding: 2px 6px; font-size: 12px; }
+        .btn--text:hover { color: var(--text); background: none; }
+        
+        .add-btn { margin-left: auto; background: var(--primary); color: white; border-color: var(--primary); }
+        .add-btn:hover { background: #0b5ed7; border-color: #0b5ed7; }
+        
+        .section {
+            background: var(--surface);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .section-title { font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        table { width: 100%; border-collapse: collapse; }
+        
+        th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--bg); }
+        
+        th { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); }
+        
+        tr:last-child td { border-bottom: none; }
+
+        .col-money, .cell-money, .cell-current {
+            width: 7.5rem;
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .col-day, .cell-day {
+            width: 4.5rem;
+            text-align: center;
+        }
+
+        .col-asof, .cell-asof {
+            width: 6rem;
+            text-align: center;
+        }
+
+        .col-actions, .cell-actions {
+            width: 5rem;
+            text-align: right;
+        }
+
+        .cell-day, .cell-asof { color: var(--text-muted); }
+
+        .cell-actions { padding-right: 4px; }
+
+        .action-cell {
+            display: inline-flex;
+            gap: 2px;
+            justify-content: flex-end;
+            align-items: center;
+        }
+        
+        .totals-row td { border-top: 1px solid var(--border); font-weight: 600; background: var(--bg); }
+        
+        .breakdown { margin-top: 8px; }
+        
+        .breakdown-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--bg);
+            font-size: 14px;
+        }
+        
+        .breakdown-row:last-child { border-bottom: none; }
+        
+        .breakdown-label { color: var(--text-muted); }
+        .breakdown-value { font-weight: 600; font-variant-numeric: tabular-nums; }
+        
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.4);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(2px);
+        }
+        
+        .modal-overlay.active { display: flex; }
+        
+        .modal {
+            background: var(--surface);
+            border-radius: 8px;
+            padding: 24px;
+            width: 360px;
+            max-width: 90%;
+        }
+        
+        .modal h3 { font-size: 16px; font-weight: 600; margin-bottom: 20px; }
+        
+        .form-group { margin-bottom: 16px; }
+        
+        .form-group label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; font-weight: 500; }
+        
+        .form-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.15s;
+        }
+        
+        .form-group input:focus { outline: none; border-color: var(--primary); }
+        
+        .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+        
+        @media (max-width: 768px) {
+            .container { padding: 20px 16px; }
+            
+            header { margin-bottom: 24px; }
+            h1 { font-size: 20px; }
+            
+            .upload-section { padding: 32px 20px; }
+
+            .upload-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .upload-actions .upload-btn,
+            .upload-actions .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .actions {
+                gap: 8px;
+                flex-wrap: wrap;
+            }
+            
+            .btn {
+                flex: 1;
+                justify-content: center;
+                min-width: 80px;
+                padding: 12px 14px;
+                font-size: 12px;
+            }
+            
+            .add-btn { flex: 0; }
+            
+            .section { padding: 16px; margin-bottom: 12px; }
+            .section-title { font-size: 12px; }
+            
+            .section-header {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            
+            .add-btn { margin-left: 0; }
+            
+            table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            th, td { padding: 8px 10px; white-space: nowrap; }
+
+            .col-money, .cell-money, .cell-current { min-width: 5.5rem; }
+            .col-day, .cell-day { min-width: 3.5rem; }
+            .col-asof, .cell-asof { min-width: 4.5rem; }
+            .col-actions, .cell-actions { min-width: 4rem; }
+            
+            .breakdown-row { font-size: 13px; padding: 8px 0; }
+            
+            .modal {
+                width: 100%;
+                max-width: 100%;
+                height: 100%;
+                border-radius: 0;
+                display: flex;
+                flex-direction: column;
+                padding: 20px;
+            }
+            
+            .modal h3 { margin-bottom: 16px; }
+            
+            .form-group { margin-bottom: 12px; }
+            
+            .modal-actions { margin-top: auto; padding-top: 16px; }
+            .modal-actions .btn { flex: 1; justify-content: center; }
+        }
+        
+        @media print {
+            @page { 
+                margin: 10mm 8mm; 
+                size: A4;
+            }
+            
+            * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            
+            body { background: white; font-size: 10px; line-height: 1.3; }
+            .container { max-width: 100%; padding: 0; }
+            
+            .upload-section, .actions, .add-btn, .btn--text { display: none !important; }
+            
+            .dashboard { display: block !important; }
+            
+            header { margin-bottom: 12px; }
+            header::after { content: "Generated: " attr(data-date); display: block; margin-top: 4px; font-size: 9px; color: var(--text-muted); }
+            h1 { font-size: 16px; }
+            .subtitle { font-size: 10px; }
+            
+            .section { 
+                border: 1px solid var(--border); 
+                margin-bottom: 8px; 
+                padding: 10px 12px; 
+                page-break-inside: avoid;
+            }
+            .section-header { margin-bottom: 8px; padding-bottom: 6px; }
+            .section-title { font-size: 10px; }
+            
+            table { font-size: 9px; }
+            th, td { padding: 4px 6px; font-size: 9px !important; color: var(--text) !important; }
+            th { font-size: 8px; }
+            .cell-actions, .col-actions { display: none !important; }
+            .cell-day, .cell-asof { color: var(--text-muted) !important; }
+            
+            .breakdown-row { padding: 4px 0; font-size: 9px; }
+            .breakdown-value { font-size: 10px; }
+            
+            .totals-row td { padding: 4px 6px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Finance Dashboard</h1>
+            <p class="subtitle">Import a JSON file to view your finances</p>
+        </header>
+        
+        <div class="upload-section" id="uploadSection">
+            <div class="upload-actions">
+                <label class="upload-btn">
+                    Choose File
+                    <input type="file" id="fileInput" accept=".json">
+                </label>
+                <button class="btn" type="button" onclick="createFreshSheet()">Start Fresh</button>
+            </div>
+            <p class="file-info" id="fileInfo">No file chosen</p>
+        </div>
+        
+        <div class="dashboard" id="dashboard">
+            <div class="actions">
+                <a href="#" class="btn" onclick="document.getElementById('fileInput').click(); return false;">Import</a>
+                <a href="#" class="btn btn--primary" onclick="exportJSON(); return false;">Export</a>
+                <a href="#" class="btn" onclick="window.print(); return false;">Print</a>
+            </div>
+            
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Income</h2>
+                    <button class="btn btn--sm add-btn" onclick="openModal('income')">+ Add</button>
+                </div>
+                <table id="incomeTable">
+                    <thead><tr><th>Item</th><th class="col-money">Amount</th><th class="col-day">Day</th><th class="col-actions"></th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Other Payments</h2>
+                    <button class="btn btn--sm add-btn" onclick="openModal('other')">+ Add</button>
+                </div>
+                <table id="otherTable">
+                    <thead><tr><th>Item</th><th class="col-money">Amount</th><th class="col-day">Day</th><th class="col-actions"></th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Bills & Expenses</h2>
+                    <button class="btn btn--sm add-btn" onclick="openModal('bills')">+ Add</button>
+                </div>
+                <table id="billsTable">
+                    <thead><tr><th>Item</th><th class="col-money">Amount</th><th class="col-day">Day</th><th class="col-actions"></th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Savings & Investments</h2>
+                    <button class="btn btn--sm add-btn" onclick="openModal('savings')">+ Add</button>
+                </div>
+                <table id="savingsTable">
+                    <thead><tr><th>Item</th><th class="col-money">Monthly</th><th class="col-money">Current</th><th class="col-asof">As of</th><th class="col-actions"></th></tr></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">Summary</h2>
+                <div id="breakdown"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="modal">
+        <div class="modal">
+            <h3 id="modalTitle">Add Item</h3>
+            <form id="itemForm">
+                <input type="hidden" id="editIndex">
+                <input type="hidden" id="editType">
+                
+                <div class="form-group">
+                    <label>Item</label>
+                    <input type="text" id="itemName" required>
+                </div>
+                
+                <div class="form-group" id="amountGroup">
+                    <label>Amount (£)</label>
+                    <input type="number" id="itemAmount" required min="0" step="0.01">
+                </div>
+                
+                <div class="form-group" id="dayGroup">
+                    <label>Day of Month</label>
+                    <input type="number" id="itemDay" min="1" max="31">
+                </div>
+                
+                <div class="form-group" id="valueGroup" style="display:none;">
+                    <label>Current Value (£)</label>
+                    <input type="number" id="itemValue" min="0" step="0.01">
+                </div>
+                
+                <div class="form-group" id="asOfGroup" style="display:none;">
+                    <label>As of Date</label>
+                    <input type="date" id="itemAsOf">
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn--primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        let financeData = createEmptyData();
+
+        function createEmptyData() {
+            return { income: [], other: [], bills: [], savings: [], asOf: null };
+        }
+
+        function normalizeData(raw) {
+            const base = createEmptyData();
+            const data = raw && typeof raw === 'object' ? raw : {};
+
+            base.income = Array.isArray(data.income) ? data.income : [];
+            base.other = Array.isArray(data.other)
+                ? data.other
+                : Array.isArray(data.joint)
+                    ? data.joint
+                    : [];
+            base.bills = Array.isArray(data.bills) ? data.bills : [];
+            base.savings = Array.isArray(data.savings) ? data.savings : [];
+            base.asOf = data.asOf || base.savings.map((item) => item && item.asOf).filter(Boolean).sort().at(-1) || null;
+
+            return base;
+        }
+
+        function escapeHtml(value) {
+            return String(value ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function formatShortDate(dateString) {
+            if (!dateString) return '-';
+            const date = new Date(dateString);
+            return Number.isNaN(date.getTime())
+                ? '-'
+                : date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+        }
+
+        function formatLongDate(dateString) {
+            if (!dateString) return '-';
+            const date = new Date(dateString);
+            return Number.isNaN(date.getTime())
+                ? '-'
+                : date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+        }
+        
+        document.getElementById('fileInput').addEventListener('change', handleFileSelect);
+        document.getElementById('itemForm').addEventListener('submit', handleFormSubmit);
+        
+        function handleFileSelect(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            document.getElementById('fileInfo').textContent = file.name;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const text = String(e.target.result || '').replace(/^\uFEFF/, '');
+                    financeData = normalizeData(JSON.parse(text));
+                    renderDashboard();
+                } catch (err) {
+                    console.error(err);
+                    alert('Invalid JSON file');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function createFreshSheet() {
+            financeData = createEmptyData();
+            document.getElementById('fileInput').value = '';
+            document.getElementById('fileInfo').textContent = 'New sheet';
+            renderDashboard();
+        }
+        
+        function formatCurrency(amount) {
+            return '£' + (amount || 0).toLocaleString('en-GB', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+        }
+        
+        function renderDashboard() {
+            financeData = normalizeData(financeData);
+            const totalIncome = financeData.income.reduce((s, d) => s + (d.amount || 0), 0);
+            const totalOther = financeData.other.reduce((s, d) => s + (d.amount || 0), 0);
+            const totalBills = financeData.bills.reduce((s, d) => s + (d.amount || 0), 0);
+            const totalSavingsMonthly = financeData.savings.reduce((s, d) => s + (d.amount || 0), 0);
+            const totalCurrentValue = financeData.savings.reduce((s, d) => s + (d.currentValue || 0), 0);
+            const remaining = totalIncome - totalOther - totalBills - totalSavingsMonthly;
+            
+            document.querySelector('header').setAttribute('data-date', new Date().toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' }));
+            
+            renderTable('incomeTable', financeData.income, 'income');
+            renderTable('otherTable', financeData.other, 'other');
+            renderTable('billsTable', financeData.bills, 'bills');
+            renderSavingsTable();
+            renderBreakdown(totalIncome, totalOther, totalBills, totalSavingsMonthly, totalCurrentValue, remaining);
+            
+            document.getElementById('uploadSection').style.display = 'none';
+            document.getElementById('dashboard').classList.add('active');
+        }
+        
+        function renderTable(tableId, data, type) {
+            const tbody = document.querySelector(`#${tableId} tbody`);
+            tbody.innerHTML = data.map((d, i) => `
+                <tr>
+                    <td>${escapeHtml(d.item)}</td>
+                    <td class="cell-money">${formatCurrency(d.amount)}</td>
+                    <td class="cell-day">${d.day || '-'}</td>
+                    <td class="cell-actions">
+                        <div class="action-cell">
+                            <button class="btn btn--text" onclick="editItem('${type}', ${i})">Edit</button>
+                            <button class="btn btn--text" onclick="deleteItem('${type}', ${i})">Del</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+            
+            if (data.length > 0) {
+                const total = data.reduce((s, d) => s + (d.amount || 0), 0);
+                tbody.innerHTML += `<tr class="totals-row"><td>Total</td><td class="cell-money">${formatCurrency(total)}</td><td></td><td></td></tr>`;
+            }
+        }
+        
+        function renderSavingsTable() {
+            const tbody = document.querySelector('#savingsTable tbody');
+            tbody.innerHTML = financeData.savings.map((d, i) => `
+                <tr>
+                    <td>${escapeHtml(d.item)}</td>
+                    <td class="cell-money">${formatCurrency(d.amount)}</td>
+                    <td class="cell-current">${formatCurrency(d.currentValue || 0)}</td>
+                    <td class="cell-asof">${formatShortDate(d.asOf)}</td>
+                    <td class="cell-actions">
+                        <div class="action-cell">
+                            <button class="btn btn--text" onclick="editItem('savings', ${i})">Edit</button>
+                            <button class="btn btn--text" onclick="deleteItem('savings', ${i})">Del</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+            
+            if (financeData.savings.length > 0) {
+                const total = financeData.savings.reduce((s, d) => s + (d.amount || 0), 0);
+                const totalValue = financeData.savings.reduce((s, d) => s + (d.currentValue || 0), 0);
+                tbody.innerHTML += `<tr class="totals-row"><td>Total</td><td class="cell-money">${formatCurrency(total)}</td><td class="cell-current">${formatCurrency(totalValue)}</td><td></td><td></td></tr>`;
+            }
+        }
+        
+        function renderBreakdown(income, other, bills, savingsMonthly, currentValue, remaining) {
+            const breakdownEl = document.getElementById('breakdown');
+            const asOfText = formatLongDate(financeData.asOf);
+            breakdownEl.innerHTML = `
+                <div class="breakdown-row"><span class="breakdown-label">Net Income</span><span class="breakdown-value">${formatCurrency(income)}</span></div>
+                <div class="breakdown-row"><span class="breakdown-label">Other Payments</span><span class="breakdown-value">-${formatCurrency(other)}</span></div>
+                <div class="breakdown-row"><span class="breakdown-label">Bills & Expenses</span><span class="breakdown-value">-${formatCurrency(bills)}</span></div>
+                <div class="breakdown-row"><span class="breakdown-label">Monthly Savings</span><span class="breakdown-value">-${formatCurrency(savingsMonthly)}</span></div>
+                <div class="breakdown-row"><span class="breakdown-label">Investments <span style="color: var(--text-muted);">(as of ${asOfText})</span></span><span class="breakdown-value">${formatCurrency(currentValue)}</span></div>
+                <div class="breakdown-row" style="border-top: 1px solid var(--border); margin-top: 8px; padding-top: 16px;"><span class="breakdown-label" style="font-weight: 600;">Remaining</span><span class="breakdown-value" style="font-size: 16px;">${formatCurrency(remaining)}</span></div>
+            `;
+        }
+        
+        function openModal(type, index = -1) {
+            document.getElementById('modal').classList.add('active');
+            document.getElementById('editType').value = type;
+            document.getElementById('editIndex').value = index;
+            
+            const isSavings = type === 'savings';
+            document.getElementById('amountGroup').style.display = 'block';
+            document.getElementById('dayGroup').style.display = (type === 'savings') ? 'none' : 'block';
+            document.getElementById('valueGroup').style.display = isSavings ? 'block' : 'none';
+            document.getElementById('asOfGroup').style.display = isSavings ? 'block' : 'none';
+            
+            document.querySelector('#itemAmount').previousElementSibling.textContent = isSavings ? 'Monthly Amount (£)' : 'Amount (£)';
+            
+            document.getElementById('modalTitle').textContent = index >= 0 ? 'Edit Item' : `Add ${type.charAt(0).toUpperCase() + type.slice(1)}`;
+            
+            if (index >= 0) {
+                const item = financeData[type][index];
+                document.getElementById('itemName').value = item.item;
+                document.getElementById('itemAmount').value = item.amount;
+                document.getElementById('itemDay').value = item.day || '';
+                document.getElementById('itemValue').value = item.currentValue || '';
+                document.getElementById('itemAsOf').value = item.asOf || '';
+            } else {
+                document.getElementById('itemForm').reset();
+            }
+
+            document.getElementById('itemName').focus();
+        }
+        
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+        }
+        
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const type = document.getElementById('editType').value;
+            const index = parseInt(document.getElementById('editIndex').value);
+            
+            const newItem = {
+                item: document.getElementById('itemName').value.trim(),
+                amount: parseFloat(document.getElementById('itemAmount').value) || 0,
+                day: type !== 'savings' ? parseInt(document.getElementById('itemDay').value) || null : undefined
+            };
+
+            if (!newItem.item) {
+                alert('Item name is required');
+                return;
+            }
+            
+            if (type === 'savings') {
+                newItem.currentValue = parseFloat(document.getElementById('itemValue').value) || 0;
+                newItem.asOf = document.getElementById('itemAsOf').value || null;
+                financeData.asOf = newItem.asOf || financeData.asOf || null;
+            }
+            
+            if (index >= 0) {
+                financeData[type][index] = newItem;
+            } else {
+                financeData[type].push(newItem);
+            }
+            
+            closeModal();
+            renderDashboard();
+        }
+        
+        function editItem(type, index) {
+            openModal(type, index);
+        }
+        
+        function deleteItem(type, index) {
+            if (confirm('Delete this item?')) {
+                financeData[type].splice(index, 1);
+                renderDashboard();
+            }
+        }
+
+        document.getElementById('modal').addEventListener('click', function (event) {
+            if (event.target.id === 'modal') {
+                closeModal();
+            }
+        });
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+        
+        function exportJSON() {
+            const jsonContent = JSON.stringify(financeData, null, 2);
+            const blob = new Blob([jsonContent], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'finance_data.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
