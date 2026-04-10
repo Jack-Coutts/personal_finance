@@ -1,0 +1,31 @@
+{
+  "income": [
+    { "name": "Monthly Salary", "amount": 3500.00 },
+    { "name": "Freelance Project", "amount": 800.00 }
+  ],
+  "bills": [
+    { "name": "Rent", "amount": 1200.00, "tags": ["housing", "fixed"] },
+    { "name": "Electric", "amount": 85.50, "tags": ["utilities", "variable"] },
+    { "name": "Gas", "amount": 45.00, "tags": ["utilities", "variable"] },
+    { "name": "Internet", "amount": 55.00, "tags": ["utilities", "fixed"] },
+    { "name": "Phone", "amount": 35.00, "tags": ["utilities", "fixed"] },
+    { "name": "Netflix", "amount": 12.99, "tags": ["subscriptions", "entertainment"] },
+    { "name": "Spotify", "amount": 9.99, "tags": ["subscriptions", "entertainment"] },
+    { "name": "Gym", "amount": 45.00, "tags": ["health", "subscriptions"] },
+    { "name": "Groceries", "amount": 350.00, "tags": ["food", "household"] },
+    { "name": "Car Insurance", "amount": 120.00, "tags": ["transport", "fixed"] },
+    { "name": "Petrol", "amount": 180.00, "tags": ["transport", "variable"] },
+    { "name": "Dining Out", "amount": 150.00, "tags": ["food", "entertainment"] }
+  ],
+  "savings": [
+    { "name": "Emergency Fund", "amount": 500.00 },
+    { "name": "Holiday", "amount": 300.00 },
+    { "name": "New Laptop", "amount": 150.00 }
+  ],
+  "summary": {
+    "totalIncome": 4300.00,
+    "totalBills": 2288.48,
+    "totalSavings": 950.00,
+    "remaining": 2011.52
+  }
+}

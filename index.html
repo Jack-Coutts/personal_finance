@@ -4,714 +4,1814 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Finance Dashboard</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        :root {
-            --bg: #f8f9fa;
-            --surface: #ffffff;
-            --text: #212529;
-            --text-muted: #6c757d;
-            --border: #dee2e6;
-            --primary: #0d6efd;
-            --success: #198754;
-            --danger: #dc3545;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        
+
+        :root {
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --success: #059669;
+            --success-light: #d1fae5;
+            --danger: #dc2626;
+            --danger-light: #fee2e2;
+            --warning: #d97706;
+            --warning-light: #fef3c7;
+            --info: #0891b2;
+            --bg: #f3f4f6;
+            --surface: #ffffff;
+            --text: #111827;
+            --text-secondary: #4b5563;
+            --text-muted: #6b7280;
+            --border: #e5e7eb;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --radius-sm: 6px;
+            --radius: 8px;
+            --radius-lg: 12px;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg);
             color: var(--text);
-            min-height: 100vh;
             line-height: 1.5;
+            min-height: 100vh;
         }
-        
-        .container { max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
-        
-        header { text-align: center; margin-bottom: 40px; }
-        
-        h1 { font-size: 24px; font-weight: 500; color: var(--text); margin-bottom: 4px; letter-spacing: -0.3px; }
-        
-        .subtitle { color: var(--text-muted); font-size: 14px; }
-        
-        .upload-section {
-            background: var(--surface);
-            border-radius: 8px;
-            padding: 48px;
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Typography improvements */
+        h1, h2, h3 {
+            text-wrap: balance;
+        }
+
+        /* Landing Page */
+        .landing {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
             text-align: center;
-            border: 1px solid var(--border);
         }
-        
-        .upload-section input[type="file"] { display: none; }
-        
-        .upload-btn {
-            background: var(--text);
-            color: var(--surface);
+
+        .landing-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .landing-brand svg {
+            width: 48px;
+            height: 48px;
+            color: var(--primary);
+        }
+
+        .landing h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.75rem;
+        }
+
+        .landing p {
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            max-width: 420px;
+            font-size: 1rem;
+        }
+
+        .upload-zone {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius-lg);
+            padding: 3rem 2rem;
+            max-width: 420px;
+            width: 100%;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            background: var(--surface);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .upload-zone:hover, .upload-zone.dragover {
+            border-color: var(--primary);
+            background: #f0fdfa;
+            box-shadow: var(--shadow);
+        }
+
+        .upload-zone svg {
+            width: 48px;
+            height: 48px;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .upload-zone h2 {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 1.125rem;
+        }
+
+        .upload-zone small {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .file-input-hidden {
+            display: none;
+        }
+
+        .landing-actions {
+            margin-top: 1.5rem;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .tag-group-hidden {
+            display: none;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
             border: none;
-            padding: 12px 28px;
-            border-radius: 6px;
-            font-size: 14px;
+            padding: 0.875rem 1.25rem;
+            border-radius: var(--radius);
+            font-size: 0.875rem;
             font-weight: 500;
             cursor: pointer;
-            transition: opacity 0.2s;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: var(--shadow-sm);
+            min-height: 44px;
         }
-        
-        .upload-btn:hover { opacity: 0.85; }
 
-        .upload-actions {
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            box-shadow: var(--shadow);
+        }
+
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            padding: 0.875rem 1.25rem;
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-height: 44px;
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+            padding: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .dashboard-header {
             display: flex;
-            gap: 12px;
-            justify-content: center;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .dashboard-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .dashboard-title svg {
+            width: 32px;
+            height: 32px;
+            color: var(--primary);
+        }
+
+        .dashboard-title .dashboard-heading {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.5rem;
             flex-wrap: wrap;
         }
-        
-        .file-info { margin-top: 12px; font-size: 13px; color: var(--text-muted); }
-        
-        .dashboard { display: none; }
-        .dashboard.active { display: block; }
-        
-        .actions {
-            display: flex;
-            gap: 16px;
-            margin-bottom: 32px;
-            align-items: center;
+
+        .header-actions button svg {
+            width: 16px;
+            height: 16px;
         }
-        
-        .btn {
+
+        /* Summary Cards */
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .summary-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .summary-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .summary-card.main {
             background: var(--surface);
             color: var(--text);
             border: 1px solid var(--border);
-            padding: 10px 18px;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.15s;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
+            border-left: 4px solid var(--primary);
         }
-        
-        .btn:hover { background: var(--bg); border-color: var(--text-muted); }
-        
-        .btn--primary { background: var(--success); color: white; border-color: var(--success); }
-        .btn--primary:hover { background: #157347; border-color: #157347; }
-        
-        .btn--sm { padding: 6px 12px; font-size: 12px; }
-        
-        .btn--text { background: none; border: none; color: var(--text-muted); padding: 2px 6px; font-size: 12px; }
-        .btn--text:hover { color: var(--text); background: none; }
-        
-        .add-btn { margin-left: auto; background: var(--primary); color: white; border-color: var(--primary); }
-        .add-btn:hover { background: #0b5ed7; border-color: #0b5ed7; }
-        
-        .section {
+
+        .summary-card.main .card-label,
+        .summary-card.main .card-value {
+            color: var(--text);
+        }
+
+        .summary-card.savings {
             background: var(--surface);
-            border-radius: 8px;
-            padding: 24px;
-            margin-bottom: 16px;
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--success);
         }
-        
+
+        .summary-card.savings .card-label,
+        .summary-card.savings .card-value {
+            color: var(--text);
+        }
+
+        .card-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .card-value {
+            font-size: 1.875rem;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -0.02em;
+            color: var(--text);
+        }
+
+        .card-value.negative {
+            color: var(--danger);
+        }
+
+        .card-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* Section Headers */
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        /* Tables Grid */
+        .tables-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.25rem;
+        }
+
+        .tables-grid .table-full-width {
+            grid-column: 1 / -1;
+        }
+
+        @media (max-width: 768px) {
+            .tables-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .table-container {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: var(--bg);
             border-bottom: 1px solid var(--border);
         }
-        
-        .section-title { font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-        
-        table { width: 100%; border-collapse: collapse; }
-        
-        th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--bg); }
-        
-        th { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); }
-        
-        tr:last-child td { border-bottom: none; }
 
-        .col-money, .cell-money, .cell-current {
-            width: 7.5rem;
+        .table-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            font-size: 0.9375rem;
+        }
+
+        .table-title svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .table-icon-income { color: var(--success); }
+        .table-icon-bills { color: var(--danger); }
+        .table-icon-savings { color: #059669; }
+
+        .table-badge {
+            background: var(--surface);
+            color: var(--text-secondary);
+            padding: 0.125rem 0.5rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border: 1px solid var(--border);
+        }
+
+        .btn-add {
+            background: var(--surface);
+            color: var(--text);
+            border: 1px solid var(--border);
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.125rem;
+            font-weight: 500;
+            transition: all 0.15s;
+            line-height: 1;
+        }
+
+        .btn-add:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 0.625rem 1rem;
+            font-weight: 500;
+            font-size: 0.6875rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 0.03em;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover {
+            background: #fafafa;
+        }
+
+        .amount {
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+            color: var(--text);
+        }
+
+        .actions {
+            width: 40px;
             text-align: right;
+        }
+
+        .btn-icon {
+            background: transparent;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            transition: all 0.15s;
+        }
+
+        .btn-icon:hover {
+            background: var(--danger-light);
+            color: var(--danger);
+        }
+
+        .btn-icon svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2.5rem 1.5rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .empty-state-icon {
+            width: 48px;
+            height: 48px;
+            color: var(--text-muted);
+            opacity: 0.5;
+        }
+
+        .empty-state-text {
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        .empty-state-action {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+            border-radius: var(--radius-sm);
+            transition: background-color 0.15s ease;
+        }
+
+        .empty-state-action:hover {
+            background-color: rgba(13, 148, 136, 0.1);
+        }
+
+        .table-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background: var(--bg);
+            border-top: 1px solid var(--border);
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .table-total {
             font-variant-numeric: tabular-nums;
         }
 
-        .col-day, .cell-day {
-            width: 4.5rem;
-            text-align: center;
-        }
-
-        .col-asof, .cell-asof {
-            width: 6rem;
-            text-align: center;
-        }
-
-        .col-actions, .cell-actions {
-            width: 5rem;
-            text-align: right;
-        }
-
-        .cell-day, .cell-asof { color: var(--text-muted); }
-
-        .cell-actions { padding-right: 4px; }
-
-        .action-cell {
-            display: inline-flex;
-            gap: 2px;
-            justify-content: flex-end;
-            align-items: center;
-        }
-        
-        .totals-row td { border-top: 1px solid var(--border); font-weight: 600; background: var(--bg); }
-        
-        .breakdown { margin-top: 8px; }
-        
-        .breakdown-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid var(--bg);
-            font-size: 14px;
-        }
-        
-        .breakdown-row:last-child { border-bottom: none; }
-        
-        .breakdown-label { color: var(--text-muted); }
-        .breakdown-value { font-weight: 600; font-variant-numeric: tabular-nums; }
-        
+        /* Modal */
         .modal-overlay {
             display: none;
             position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.4);
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1000;
             align-items: center;
             justify-content: center;
-            z-index: 1000;
-            backdrop-filter: blur(2px);
+            padding: 1rem;
+            backdrop-filter: blur(4px);
         }
-        
-        .modal-overlay.active { display: flex; }
-        
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
         .modal {
             background: var(--surface);
-            border-radius: 8px;
-            padding: 24px;
-            width: 360px;
-            max-width: 90%;
+            border-radius: var(--radius-lg);
+            max-width: 400px;
+            width: 100%;
+            box-shadow: var(--shadow-lg);
+            animation: modalIn 0.2s ease;
         }
-        
-        .modal h3 { font-size: 16px; font-weight: 600; margin-bottom: 20px; }
-        
-        .form-group { margin-bottom: 16px; }
-        
-        .form-group label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; font-weight: 500; }
-        
+
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.96);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-header {
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .btn-close {
+            background: transparent;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            transition: all 0.15s;
+        }
+
+        .btn-close:hover {
+            background: var(--bg);
+            color: var(--text);
+        }
+
+        .modal-body {
+            padding: 1.25rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
         .form-group input {
             width: 100%;
-            padding: 10px 12px;
+            padding: 0.625rem 0.75rem;
             border: 1px solid var(--border);
-            border-radius: 6px;
-            font-size: 14px;
-            transition: border-color 0.15s;
+            border-radius: var(--radius);
+            font-size: 0.9375rem;
+            transition: all 0.15s;
+            background: var(--surface);
         }
-        
-        .form-group input:focus { outline: none; border-color: var(--primary); }
-        
-        .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
-        
-        @media (max-width: 768px) {
-            .container { padding: 20px 16px; }
-            
-            header { margin-bottom: 24px; }
-            h1 { font-size: 20px; }
-            
-            .upload-section { padding: 32px 20px; }
 
-            .upload-actions {
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
+        }
+
+        .input-prefix {
+            position: relative;
+        }
+
+        .input-prefix input {
+            padding-left: 2rem;
+        }
+
+        .input-prefix span {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.9375rem;
+        }
+
+        .modal-footer {
+            padding: 1rem 1.25rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.625rem;
+        }
+
+        /* Mobile */
+        @media (max-width: 640px) {
+            .landing h1 {
+                font-size: 1.75rem;
+            }
+
+            .dashboard {
+                padding: 1rem;
+            }
+
+            .dashboard-header {
                 flex-direction: column;
                 align-items: stretch;
             }
 
-            .upload-actions .upload-btn,
-            .upload-actions .btn {
-                width: 100%;
-                justify-content: center;
+            .card-value {
+                font-size: 1.5rem;
             }
-            
-            .actions {
-                gap: 8px;
-                flex-wrap: wrap;
-            }
-            
-            .btn {
-                flex: 1;
-                justify-content: center;
-                min-width: 80px;
-                padding: 12px 14px;
-                font-size: 12px;
-            }
-            
-            .add-btn { flex: 0; }
-            
-            .section { padding: 16px; margin-bottom: 12px; }
-            .section-title { font-size: 12px; }
-            
-            .section-header {
-                flex-wrap: wrap;
-                gap: 8px;
-            }
-            
-            .add-btn { margin-left: 0; }
-            
-            table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-            th, td { padding: 8px 10px; white-space: nowrap; }
 
-            .col-money, .cell-money, .cell-current { min-width: 5.5rem; }
-            .col-day, .cell-day { min-width: 3.5rem; }
-            .col-asof, .cell-asof { min-width: 4.5rem; }
-            .col-actions, .cell-actions { min-width: 4rem; }
-            
-            .breakdown-row { font-size: 13px; padding: 8px 0; }
-            
-            .modal {
-                width: 100%;
-                max-width: 100%;
-                height: 100%;
-                border-radius: 0;
-                display: flex;
-                flex-direction: column;
-                padding: 20px;
+            th, td {
+                padding: 0.625rem 0.75rem;
             }
-            
-            .modal h3 { margin-bottom: 16px; }
-            
-            .form-group { margin-bottom: 12px; }
-            
-            .modal-actions { margin-top: auto; padding-top: 16px; }
-            .modal-actions .btn { flex: 1; justify-content: center; }
         }
-        
-        @media print {
-            @page { 
-                margin: 10mm 8mm; 
-                size: A4;
+
+        .toast-container {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .toast {
+            background: var(--text);
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            animation: toastIn 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.625rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .toast.success { background: var(--success); }
+        .toast.error { background: var(--danger); }
+
+        /* Tags */
+        #tagTable {
+            margin-top: 1.25rem;
+        }
+
+        .tag-input-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 0.375rem 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            min-height: 44px;
+            align-items: center;
+            background: var(--surface);
+        }
+
+        .tag-input-container:focus-within {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
+        }
+
+        /* Tags in modal input */
+        .tag-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.125rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: var(--text);
+            background: var(--bg);
+            border: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        .tag-chip .remove {
+            width: 14px;
+            height: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: opacity 0.15s;
+            font-size: 11px;
+            line-height: 1;
+        }
+
+        .tag-chip .remove:hover {
+            opacity: 1;
+        }
+
+        .tag-input {
+            flex: 1;
+            min-width: 80px;
+            border: none;
+            background: transparent;
+            font-size: 0.9375rem;
+            padding: 0.25rem;
+            outline: none;
+        }
+
+        /* Tags in table cells — plain italic text */
+        .tag-cell {
+            font-size: 0.8125rem;
+            font-style: italic;
+            color: var(--text-muted);
+        }
+
+        .tag-card-count {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        @media (max-width: 640px) {
+            .tag-cards {
+                gap: 0.5rem;
             }
-            
-            * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            
-            body { background: white; font-size: 10px; line-height: 1.3; }
-            .container { max-width: 100%; padding: 0; }
-            
-            .upload-section, .actions, .add-btn, .btn--text { display: none !important; }
-            
-            .dashboard { display: block !important; }
-            
-            header { margin-bottom: 12px; }
-            header::after { content: "Generated: " attr(data-date); display: block; margin-top: 4px; font-size: 9px; color: var(--text-muted); }
-            h1 { font-size: 16px; }
-            .subtitle { font-size: 10px; }
-            
-            .section { 
-                border: 1px solid var(--border); 
-                margin-bottom: 8px; 
-                padding: 10px 12px; 
-                page-break-inside: avoid;
+            .tag-card {
+                padding: 0.5rem 0.75rem;
             }
-            .section-header { margin-bottom: 8px; padding-bottom: 6px; }
-            .section-title { font-size: 10px; }
-            
-            table { font-size: 9px; }
-            th, td { padding: 4px 6px; font-size: 9px !important; color: var(--text) !important; }
-            th { font-size: 8px; }
-            .cell-actions, .col-actions { display: none !important; }
-            .cell-day, .cell-asof { color: var(--text-muted) !important; }
-            
-            .breakdown-row { padding: 4px 0; font-size: 9px; }
-            .breakdown-value { font-size: 10px; }
-            
-            .totals-row td { padding: 4px 6px; }
+        }
+
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Finance Dashboard</h1>
-            <p class="subtitle">Import a JSON file to view your finances</p>
-        </header>
-        
-        <div class="upload-section" id="uploadSection">
-            <div class="upload-actions">
-                <label class="upload-btn">
-                    Choose File
-                    <input type="file" id="fileInput" accept=".json">
-                </label>
-                <button class="btn" type="button" onclick="createFreshSheet()">Start Fresh</button>
-            </div>
-            <p class="file-info" id="fileInfo">No file chosen</p>
+    <!-- Landing Page -->
+    <div class="landing" id="landing">
+        <div class="landing-brand">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+            </svg>
         </div>
+        <h1>Finance Dashboard</h1>
+        <p>Import your financial data or start fresh. All data stays local - no server, no persistence.</p>
         
-        <div class="dashboard" id="dashboard">
-            <div class="actions">
-                <a href="#" class="btn" onclick="document.getElementById('fileInput').click(); return false;">Import</a>
-                <a href="#" class="btn btn--primary" onclick="exportJSON(); return false;">Export</a>
-                <a href="#" class="btn" onclick="window.print(); return false;">Print</a>
+        <div class="upload-zone" id="uploadZone" tabindex="0" role="button" aria-label="Upload JSON file">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+            </svg>
+            <h2>Drop your JSON file here</h2>
+            <small>or click to browse files</small>
+            <input type="file" id="fileInput" accept=".json" class="file-input-hidden">
+        </div>
+
+        <div class="landing-actions">
+            <button class="btn-secondary" onclick="startFresh()">Start Fresh</button>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard" id="dashboard">
+        <div class="dashboard-header">
+            <div class="dashboard-title">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                </svg>
+                <h2 class="dashboard-heading">Finance Overview</h2>
             </div>
-            
-            <div class="section">
-                <div class="section-header">
-                    <h2 class="section-title">Income</h2>
-                    <button class="btn btn--sm add-btn" onclick="openModal('income')">+ Add</button>
+            <div class="header-actions">
+                <button class="btn-secondary" onclick="exportData('json')">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                    </svg>
+                    Export JSON
+                </button>
+                <button class="btn-secondary" onclick="exportData('csv')">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    Export CSV
+                </button>
+                <button class="btn-secondary" onclick="exportMarkdown()">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                    Export MD
+                </button>
+                <button class="btn-secondary" onclick="resetDashboard()">New Session</button>
+            </div>
+        </div>
+
+        <!-- Summary Cards -->
+        <div class="summary-cards">
+            <div class="summary-card main">
+                <div class="card-label">Remaining</div>
+                <div class="card-value" id="remainingValue">£0.00</div>
+                <div class="card-subtitle">Income minus bills</div>
+            </div>
+            <div class="summary-card savings">
+                <div class="card-label">Total Savings</div>
+                <div class="card-value" id="savingsValue">£0.00</div>
+            </div>
+            <div class="summary-card">
+                <div class="card-label">Bills</div>
+                <div class="card-value" id="billsValue">£0.00</div>
+            </div>
+        </div>
+
+        <!-- Data Tables -->
+        <div class="section-header">
+            <h2 class="section-title">Financial Breakdown</h2>
+        </div>
+
+        <div class="tables-grid">
+            <!-- Income -->
+            <div class="table-container">
+                <div class="table-header">
+                    <div class="table-title">
+                        <svg class="table-icon-income" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                        </svg>
+                        Income
+                        <span class="table-badge" id="incomeBadge">0</span>
+                    </div>
+                    <button class="btn-add" onclick="openModal('income')" aria-label="Add income entry">+</button>
                 </div>
-                <table id="incomeTable">
-                    <thead><tr><th>Item</th><th class="col-money">Amount</th><th class="col-day">Day</th><th class="col-actions"></th></tr></thead>
-                    <tbody></tbody>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Source</th>
+                            <th class="text-right">Amount</th>
+                            <th class="actions"><span class="sr-only">Actions</span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="incomeBody">
+                        <tr class="empty-state">
+                            <td colspan="3">
+                                <div class="empty-state-content">
+                                    <svg class="empty-state-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                                    </svg>
+                                    <p class="empty-state-text">No income yet</p>
+                                    <button class="empty-state-action" onclick="openModal('income')">Add your first income</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
-            </div>
-            
-            <div class="section">
-                <div class="section-header">
-                    <h2 class="section-title">Other Payments</h2>
-                    <button class="btn btn--sm add-btn" onclick="openModal('other')">+ Add</button>
+                <div class="table-footer">
+                    <span>Total</span>
+                    <span class="table-total" id="incomeTotal">£0.00</span>
                 </div>
-                <table id="otherTable">
-                    <thead><tr><th>Item</th><th class="col-money">Amount</th><th class="col-day">Day</th><th class="col-actions"></th></tr></thead>
-                    <tbody></tbody>
-                </table>
             </div>
-            
-            <div class="section">
-                <div class="section-header">
-                    <h2 class="section-title">Bills & Expenses</h2>
-                    <button class="btn btn--sm add-btn" onclick="openModal('bills')">+ Add</button>
+
+            <!-- Savings -->
+            <div class="table-container">
+                <div class="table-header">
+                    <div class="table-title">
+                        <svg class="table-icon-savings" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        Savings
+                        <span class="table-badge" id="savingsBadge">0</span>
+                    </div>
+                    <button class="btn-add" onclick="openModal('savings')" aria-label="Add savings entry">+</button>
                 </div>
-                <table id="billsTable">
-                    <thead><tr><th>Item</th><th class="col-money">Amount</th><th class="col-day">Day</th><th class="col-actions"></th></tr></thead>
-                    <tbody></tbody>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Savings Item</th>
+                            <th class="text-right">Amount</th>
+                            <th class="actions"><span class="sr-only">Actions</span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="savingsBody">
+                        <tr class="empty-state">
+                            <td colspan="3">
+                                <div class="empty-state-content">
+                                    <svg class="empty-state-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    <p class="empty-state-text">No savings yet</p>
+                                    <button class="empty-state-action" onclick="openModal('savings')">Add your first savings</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
-            </div>
-            
-            <div class="section">
-                <div class="section-header">
-                    <h2 class="section-title">Savings & Investments</h2>
-                    <button class="btn btn--sm add-btn" onclick="openModal('savings')">+ Add</button>
+                <div class="table-footer">
+                    <span>Total</span>
+                    <span class="table-total" id="savingsTableTotal">£0.00</span>
                 </div>
-                <table id="savingsTable">
-                    <thead><tr><th>Item</th><th class="col-money">Monthly</th><th class="col-money">Current</th><th class="col-asof">As of</th><th class="col-actions"></th></tr></thead>
-                    <tbody></tbody>
-                </table>
             </div>
-            
-            <div class="section">
-                <h2 class="section-title">Summary</h2>
-                <div id="breakdown"></div>
+
+            <!-- Bills (full width) -->
+            <div class="table-container table-full-width">
+                <div class="table-header">
+                    <div class="table-title">
+                        <svg class="table-icon-bills" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
+                        </svg>
+                        Bills
+                        <span class="table-badge" id="billsBadge">0</span>
+                    </div>
+                    <button class="btn-add" onclick="openModal('bills')" aria-label="Add bill entry">+</button>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Bill</th>
+                            <th>Tags</th>
+                            <th class="text-right">Amount</th>
+                            <th class="actions"><span class="sr-only">Actions</span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="billsBody">
+                        <tr class="empty-state">
+                            <td colspan="4">
+                                <div class="empty-state-content">
+                                    <svg class="empty-state-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
+                                    </svg>
+                                    <p class="empty-state-text">No bills yet</p>
+                                    <button class="empty-state-action" onclick="openModal('bills')">Add your first bill</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="table-footer">
+                    <span>Total</span>
+                    <span class="table-total" id="billsTotal">£0.00</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tag Summary -->
+        <div class="table-container" id="tagTable">
+            <div class="table-header">
+                <div class="table-title">
+                    <svg class="table-icon-bills" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                    </svg>
+                    Bills by Tag
+                    <span class="table-badge" id="tagBadge">0</span>
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tag</th>
+                        <th class="text-right">Amount</th>
+                        <th class="text-right">Bills</th>
+                    </tr>
+                </thead>
+                <tbody id="tagTableBody">
+                    <tr class="empty-row">
+                        <td colspan="3" class="empty-state">
+                            <div class="empty-state-content">
+                                <svg class="empty-state-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                                </svg>
+                                <p class="empty-state-text">No tags yet</p>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="tag-note" id="tagNote" style="display: none; padding: 0.5rem 1rem; font-size: 0.75rem; color: var(--text-muted); border-top: 1px solid var(--border);">Bills with multiple tags are counted under each tag.</div>
+        </div>
+
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal" tabindex="-1">
+            <div class="modal-header">
+                <h2 id="modalTitle">Add Entry</h2>
+                <button class="btn-close" onclick="closeModal()" aria-label="Close">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="entryForm">
+                    <div class="form-group">
+                        <label for="entryName">Name</label>
+                        <input type="text" id="entryName" required placeholder="e.g., Monthly Salary" maxlength="100">
+                    </div>
+                    <div class="form-group">
+                        <label for="entryAmount">Amount</label>
+                        <div class="input-prefix">
+                            <span>£</span>
+                            <input type="number" id="entryAmount" required min="0" step="0.01" placeholder="0.00">
+                        </div>
+                    </div>
+                    <div class="form-group tag-group-hidden" id="tagGroup">
+                        <label>Tags (optional)</label>
+                        <div class="tag-input-container" id="tagInputContainer">
+                            <input type="text" class="tag-input" id="tagInput" placeholder="Add tags..." maxlength="20">
+                        </div>
+                        <small style="color: var(--text-muted); font-size: 0.75rem;">Press Enter or comma to add a tag</small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                <button type="button" class="btn-primary" onclick="saveEntry()">Save</button>
             </div>
         </div>
     </div>
-    
-    <div class="modal-overlay" id="modal">
-        <div class="modal">
-            <h3 id="modalTitle">Add Item</h3>
-            <form id="itemForm">
-                <input type="hidden" id="editIndex">
-                <input type="hidden" id="editType">
-                
-                <div class="form-group">
-                    <label>Item</label>
-                    <input type="text" id="itemName" required>
-                </div>
-                
-                <div class="form-group" id="amountGroup">
-                    <label>Amount (£)</label>
-                    <input type="number" id="itemAmount" required min="0" step="0.01">
-                </div>
-                
-                <div class="form-group" id="dayGroup">
-                    <label>Day of Month</label>
-                    <input type="number" id="itemDay" min="1" max="31">
-                </div>
-                
-                <div class="form-group" id="valueGroup" style="display:none;">
-                    <label>Current Value (£)</label>
-                    <input type="number" id="itemValue" min="0" step="0.01">
-                </div>
-                
-                <div class="form-group" id="asOfGroup" style="display:none;">
-                    <label>As of Date</label>
-                    <input type="date" id="itemAsOf">
-                </div>
-                
-                <div class="modal-actions">
-                    <button type="button" class="btn" onclick="closeModal()">Cancel</button>
-                    <button type="submit" class="btn btn--primary">Save</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    
+
+    <div class="toast-container" id="toastContainer" role="status" aria-live="polite"></div>
+
     <script>
-        let financeData = createEmptyData();
+        // State - 3 categories: income, bills, and savings
+        let state = {
+            income: [],
+            bills: [],
+            savings: []
+        };
 
-        function createEmptyData() {
-            return { income: [], other: [], bills: [], savings: [], asOf: null };
+        let currentModalType = null;
+        let currentTags = []; // Tags being entered in modal
+        let lastFocusedElement = null;
+
+        // DOM Elements
+        const landing = document.getElementById('landing');
+        const dashboard = document.getElementById('dashboard');
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modal = modalOverlay.querySelector('.modal');
+        const modalTitle = document.getElementById('modalTitle');
+        const entryName = document.getElementById('entryName');
+        const entryAmount = document.getElementById('entryAmount');
+        const tagGroup = document.getElementById('tagGroup');
+        const tagInputContainer = document.getElementById('tagInputContainer');
+        const tagInput = document.getElementById('tagInput');
+
+        // Format currency (GBP)
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-GB', {
+                style: 'currency',
+                currency: 'GBP'
+            }).format(amount);
         }
 
-        function normalizeData(raw) {
-            const base = createEmptyData();
-            const data = raw && typeof raw === 'object' ? raw : {};
-
-            base.income = Array.isArray(data.income) ? data.income : [];
-            base.other = Array.isArray(data.other)
-                ? data.other
-                : Array.isArray(data.joint)
-                    ? data.joint
-                    : [];
-            base.bills = Array.isArray(data.bills) ? data.bills : [];
-            base.savings = Array.isArray(data.savings) ? data.savings : [];
-            base.asOf = data.asOf || base.savings.map((item) => item && item.asOf).filter(Boolean).sort().at(-1) || null;
-
-            return base;
+        // XSS Sanitization
+        function sanitize(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
         }
 
-        function escapeHtml(value) {
+        function normalizeText(value, maxLength) {
             return String(value ?? '')
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#39;');
+                .replace(/\s+/g, ' ')
+                .trim()
+                .slice(0, maxLength);
         }
 
-        function formatShortDate(dateString) {
-            if (!dateString) return '-';
-            const date = new Date(dateString);
-            return Number.isNaN(date.getTime())
-                ? '-'
-                : date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+        function getBillTags(bill) {
+            if (!bill.tags || !Array.isArray(bill.tags)) return [];
+            return [...new Set(
+                bill.tags
+                    .map(tag => normalizeText(tag, 20).toLowerCase())
+                    .filter(Boolean)
+            )].slice(0, 5);
         }
 
-        function formatLongDate(dateString) {
-            if (!dateString) return '-';
-            const date = new Date(dateString);
-            return Number.isNaN(date.getTime())
-                ? '-'
-                : date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+        function getUniqueBillTagCount() {
+            return new Set(state.bills.flatMap(getBillTags)).size;
         }
-        
-        document.getElementById('fileInput').addEventListener('change', handleFileSelect);
-        document.getElementById('itemForm').addEventListener('submit', handleFormSubmit);
-        
-        function handleFileSelect(e) {
-            const file = e.target.files[0];
-            if (!file) return;
+
+        function getModalFocusableElements() {
+            return [...modal.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')]
+                .filter(element => !element.disabled && element.offsetParent !== null);
+        }
+
+        // Show toast
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    ${type === 'success' 
+                        ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>'
+                        : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>'
+                    }
+                </svg>
+                ${sanitize(message)}
+            `;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 2500);
+        }
+
+        // Calculate all values and render tag summary
+        function calculateAll() {
+            const totalIncome = state.income.reduce((sum, item) => sum + item.amount, 0);
+            const totalBills = state.bills.reduce((sum, item) => sum + item.amount, 0);
+            const totalSavings = state.savings.reduce((sum, item) => sum + item.amount, 0);
             
-            document.getElementById('fileInfo').textContent = file.name;
+            // Remaining = Income - Bills (savings is separate)
+            const remaining = totalIncome - totalBills;
+
+            // Update summary cards
+            const remainingEl = document.getElementById('remainingValue');
+            remainingEl.textContent = formatCurrency(remaining);
+            remainingEl.classList.toggle('negative', remaining < 0);
+            document.getElementById('savingsValue').textContent = formatCurrency(totalSavings);
+            document.getElementById('billsValue').textContent = formatCurrency(totalBills);
+
+            // Update table totals
+            document.getElementById('incomeTotal').textContent = formatCurrency(totalIncome);
+            document.getElementById('billsTotal').textContent = formatCurrency(totalBills);
+            document.getElementById('savingsTableTotal').textContent = formatCurrency(totalSavings);
+
+            // Update badges
+            document.getElementById('incomeBadge').textContent = state.income.length;
+            document.getElementById('billsBadge').textContent = state.bills.length;
+            document.getElementById('savingsBadge').textContent = state.savings.length;
+            document.getElementById('tagBadge').textContent = getUniqueBillTagCount();
+
+            // Render tag summary table
+            renderTagSummary();
+        }
+
+        // Render tag summary table (visible on screen and print)
+        function renderTagSummary() {
+            const tagTable = document.getElementById('tagTable');
+            const tagTableBody = document.getElementById('tagTableBody');
+            const tagBadge = document.getElementById('tagBadge');
+
+            // Aggregate tags from bills
+            const tagTotals = {};
+            state.bills.forEach(bill => {
+                getBillTags(bill).forEach(tag => {
+                    if (!tagTotals[tag]) {
+                        tagTotals[tag] = { amount: 0, count: 0 };
+                    }
+                    tagTotals[tag].amount += bill.amount;
+                    tagTotals[tag].count++;
+                });
+            });
+
+            const tags = Object.keys(tagTotals).sort();
+
+            if (tags.length === 0) {
+                tagTable.style.display = 'none';
+                if (tagBadge) tagBadge.textContent = '0';
+                return;
+            }
+
+            tagTable.style.display = 'block';
             
+            if (tagBadge) tagBadge.textContent = tags.length;
+            
+            // Render table rows
+            tagTableBody.innerHTML = tags.map(tag => {
+                const { amount, count } = tagTotals[tag];
+                return `
+                    <tr>
+                        <td>${sanitize(tag)}</td>
+                        <td class="amount text-right">${formatCurrency(amount)}</td>
+                        <td class="text-right">${count}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            // Show note if any bills have multiple tags
+            const hasMultiTagged = state.bills.some(b => b.tags && b.tags.length > 1);
+            const tagNote = document.getElementById('tagNote');
+            if (tagNote) tagNote.style.display = hasMultiTagged ? 'block' : 'none';
+        }
+
+        // Render a table
+        function renderTable(type, data, bodyId) {
+            const tbody = document.getElementById(bodyId);
+            const isBills = type === 'bills';
+            
+            if (data.length === 0) {
+                const emptyStates = {
+                    income: {
+                        icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>',
+                        text: 'No income yet',
+                        action: 'Add your first income'
+                    },
+                    bills: {
+                        icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>',
+                        text: 'No bills yet',
+                        action: 'Add your first bill'
+                    },
+                    savings: {
+                        icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>',
+                        text: 'No savings yet',
+                        action: 'Add your first savings'
+                    }
+                };
+                const empty = emptyStates[type];
+                const colspan = isBills ? 4 : 3;
+                tbody.innerHTML = `<tr class="empty-state">
+                    <td colspan="${colspan}">
+                        <div class="empty-state-content">
+                            <svg class="empty-state-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">${empty.icon}</svg>
+                            <p class="empty-state-text">${empty.text}</p>
+                            <button class="empty-state-action" onclick="openModal('${type}')">${empty.action}</button>
+                        </div>
+                    </td>
+                </tr>`;
+                return;
+            }
+
+            tbody.innerHTML = data.map((item, index) => {
+                const tagsHtml = isBills && item.tags && item.tags.length > 0
+                    ? renderTagCell(item.tags)
+                    : '';
+                
+                if (isBills) {
+                    return `
+                        <tr>
+                            <td>${sanitize(item.name)}</td>
+                            <td class="tag-cell">${tagsHtml}</td>
+                            <td class="amount text-right">${formatCurrency(item.amount)}</td>
+                            <td class="actions">
+                                <button class="btn-icon" onclick="deleteEntry('${type}', ${index})" title="Remove" aria-label="Remove ${sanitize(item.name)}">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                    </svg>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }
+                
+                return `
+                    <tr>
+                        <td>${sanitize(item.name)}</td>
+                        <td class="amount text-right">${formatCurrency(item.amount)}</td>
+                        <td class="actions">
+                            <button class="btn-icon" onclick="deleteEntry('${type}', ${index})" title="Remove" aria-label="Remove ${sanitize(item.name)}">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Render tags for table cell — plain comma-separated text
+        function renderTagCell(tags) {
+            return tags.map(tag => sanitize(tag)).join(', ');
+        }
+
+        // Render all tables
+        function renderAllTables() {
+            renderTable('income', state.income, 'incomeBody');
+            renderTable('bills', state.bills, 'billsBody');
+            renderTable('savings', state.savings, 'savingsBody');
+            calculateAll();
+        }
+
+        // Open modal
+        function openModal(type) {
+            currentModalType = type;
+            lastFocusedElement = document.activeElement;
+            
+            const titles = {
+                income: 'Add Income',
+                bills: 'Add Bill',
+                savings: 'Add Savings'
+            };
+            
+            modalTitle.textContent = titles[type];
+            
+            entryName.value = '';
+            entryAmount.value = '';
+            
+            // Show/hide tag input for bills only
+            if (type === 'bills') {
+                tagGroup.classList.remove('tag-group-hidden');
+                currentTags = [];
+                renderTagChips();
+            } else {
+                tagGroup.classList.add('tag-group-hidden');
+                currentTags = [];
+            }
+            
+            modalOverlay.classList.add('active');
+            entryName.focus();
+        }
+
+        // Render tag chips in modal
+        function renderTagChips() {
+            // Clear existing chips (keep the input)
+            const chips = tagInputContainer.querySelectorAll('.tag-chip');
+            chips.forEach(chip => chip.remove());
+            
+            // Add chips before the input
+            currentTags.forEach((tag, index) => {
+                const chip = document.createElement('span');
+                chip.className = 'tag-chip';
+                chip.innerHTML = `${sanitize(tag)} <span class="remove" data-index="${index}">×</span>`;
+                tagInputContainer.insertBefore(chip, tagInput);
+            });
+        }
+
+        // Add a tag
+        function addTag(tag) {
+            tag = tag.trim().toLowerCase();
+            if (!tag) return;
+            if (currentTags.includes(tag)) {
+                showToast('Tag already exists', 'error');
+                return;
+            }
+            if (currentTags.length >= 5) {
+                showToast('Maximum 5 tags allowed', 'error');
+                return;
+            }
+            currentTags.push(tag);
+            renderTagChips();
+            tagInput.value = '';
+        }
+
+        // Remove a tag
+        function removeTag(index) {
+            currentTags.splice(index, 1);
+            renderTagChips();
+        }
+
+        // Close modal
+        function closeModal() {
+            const modalType = currentModalType;
+            const restoreTarget = lastFocusedElement && lastFocusedElement.isConnected
+                ? lastFocusedElement
+                : document.querySelector(`button[onclick="openModal('${modalType}')"]`);
+
+            modalOverlay.classList.remove('active');
+            currentModalType = null;
+            entryName.value = '';
+            entryAmount.value = '';
+            currentTags = [];
+            lastFocusedElement = null;
+            tagGroup.classList.add('tag-group-hidden');
+            renderTagChips();
+
+            if (restoreTarget) {
+                restoreTarget.focus();
+            }
+        }
+
+        // Save entry
+        function saveEntry() {
+            const name = entryName.value.trim();
+            const amount = parseFloat(entryAmount.value);
+
+            if (!name || isNaN(amount) || amount <= 0) {
+                showToast('Please enter a valid name and amount', 'error');
+                return;
+            }
+
+            const entry = { name, amount };
+            
+            // Add tags for bills
+            if (currentModalType === 'bills' && currentTags.length > 0) {
+                entry.tags = [...currentTags];
+            }
+
+            state[currentModalType].push(entry);
+            renderAllTables();
+            closeModal();
+            showToast('Entry added');
+        }
+
+        // Delete entry
+        function deleteEntry(type, index) {
+            if (!confirm(`Remove "${state[type][index].name}"?`)) return;
+            state[type].splice(index, 1);
+            renderAllTables();
+            showToast('Entry removed');
+        }
+
+        // Escape CSV field to prevent formula injection
+        function escapeCsvField(value) {
+            const str = String(value).replace(/"/g, '""');
+            // Prepend tab to prevent formula injection in Excel/Sheets
+            if (/^[=+\-@]/.test(str)) return '\t' + str;
+            return str;
+        }
+
+        // Export data
+        function exportData(format) {
+            const totalIncome = state.income.reduce((sum, item) => sum + item.amount, 0);
+            const totalBills = state.bills.reduce((sum, item) => sum + item.amount, 0);
+            const totalSavings = state.savings.reduce((sum, item) => sum + item.amount, 0);
+            const remaining = totalIncome - totalBills;
+
+            if (format === 'json') {
+                const exportState = {
+                    ...state,
+                    summary: {
+                        totalIncome,
+                        totalBills,
+                        totalSavings,
+                        remaining
+                    }
+                };
+                const dataStr = JSON.stringify(exportState, null, 2);
+                const blob = new Blob([dataStr], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `finance-${new Date().toISOString().split('T')[0]}.json`;
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast('JSON exported');
+            } else if (format === 'csv') {
+                let csv = 'Type,Name,Amount,Tags\n';
+                
+                state.income.forEach(item => {
+                    csv += `Income,"${escapeCsvField(item.name)}",${item.amount},\n`;
+                });
+                state.bills.forEach(item => {
+                    const tags = item.tags ? item.tags.join('|') : '';
+                    csv += `Bills,"${escapeCsvField(item.name)}",${item.amount},"${escapeCsvField(tags)}"\n`;
+                });
+                state.savings.forEach(item => {
+                    csv += `Savings,"${escapeCsvField(item.name)}",${item.amount},\n`;
+                });
+
+                const blob = new Blob([csv], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `finance-${new Date().toISOString().split('T')[0]}.csv`;
+                a.click();
+                URL.revokeObjectURL(url);
+                showToast('CSV exported');
+            }
+        }
+
+        // Generate report data used by Markdown export
+        function getReportData() {
+            const totalIncome = state.income.reduce((sum, item) => sum + item.amount, 0);
+            const totalBills = state.bills.reduce((sum, item) => sum + item.amount, 0);
+            const totalSavings = state.savings.reduce((sum, item) => sum + item.amount, 0);
+            const remaining = totalIncome - totalBills;
+            const date = new Date().toLocaleDateString('en-GB', {
+                year: 'numeric', month: 'long', day: 'numeric'
+            });
+
+            // Tag totals
+            const tagTotals = {};
+            state.bills.forEach(bill => {
+                getBillTags(bill).forEach(tag => {
+                    if (!tagTotals[tag]) tagTotals[tag] = { amount: 0, count: 0 };
+                    tagTotals[tag].amount += bill.amount;
+                    tagTotals[tag].count++;
+                });
+            });
+
+            return { totalIncome, totalBills, totalSavings, remaining, date, tagTotals };
+        }
+
+        // Export Markdown
+        function exportMarkdown() {
+            const r = getReportData();
+            const fc = (n) => formatCurrency(n);
+            const escapeMd = (s) => String(s)
+                .replace(/\\/g, '\\\\')
+                .replace(/\r?\n/g, ' ')
+                .replace(/\|/g, '\\|');
+            let md = `# Finance Overview\n\n`;
+            md += `**Date:** ${r.date}\n\n`;
+
+            md += `## Summary\n\n`;
+            md += `| | Amount |\n`;
+            md += `|---|---:|\n`;
+            md += `| Remaining | ${fc(r.remaining)} |\n`;
+            md += `| Total Savings | ${fc(r.totalSavings)} |\n`;
+            md += `| Total Bills | ${fc(r.totalBills)} |\n\n`;
+
+            md += `## Income\n\n`;
+            if (state.income.length === 0) {
+                md += `No income entries.\n\n`;
+            } else {
+                md += `| Source | Amount |\n`;
+                md += `|---|---:|\n`;
+                state.income.forEach(item => {
+                    md += `| ${escapeMd(item.name)} | ${fc(item.amount)} |\n`;
+                });
+                md += `| **Total** | **${fc(r.totalIncome)}** |\n\n`;
+            }
+
+            md += `## Bills\n\n`;
+            if (state.bills.length === 0) {
+                md += `No bill entries.\n\n`;
+            } else {
+                md += `| Bill | Tags | Amount |\n`;
+                md += `|---|---|---:|\n`;
+                state.bills.forEach(item => {
+                    const tags = item.tags ? item.tags.map(escapeMd).join(', ') : '';
+                    md += `| ${escapeMd(item.name)} | ${tags} | ${fc(item.amount)} |\n`;
+                });
+                md += `| **Total** | | **${fc(r.totalBills)}** |\n\n`;
+            }
+
+            md += `## Savings\n\n`;
+            if (state.savings.length === 0) {
+                md += `No savings entries.\n\n`;
+            } else {
+                md += `| Item | Amount |\n`;
+                md += `|---|---:|\n`;
+                state.savings.forEach(item => {
+                    md += `| ${escapeMd(item.name)} | ${fc(item.amount)} |\n`;
+                });
+                md += `| **Total** | **${fc(r.totalSavings)}** |\n\n`;
+            }
+
+            const tags = Object.keys(r.tagTotals).sort();
+            if (tags.length > 0) {
+                md += `## Bills by Tag\n\n`;
+                md += `| Tag | Amount | Bills |\n`;
+                md += `|---|---:|---:|\n`;
+                tags.forEach(tag => {
+                    md += `| ${escapeMd(tag)} | ${fc(r.tagTotals[tag].amount)} | ${r.tagTotals[tag].count} |\n`;
+                });
+                md += `\n`;
+            }
+
+            const blob = new Blob([md], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `finance-${new Date().toISOString().split('T')[0]}.md`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('Markdown exported');
+        }
+
+        // Validate and sanitize imported item
+        function validateItem(item) {
+            if (!item || typeof item !== 'object') return null;
+            const name = normalizeText(item.name, 100);
+            const amount = Number.parseFloat(item.amount);
+            if (!name) return null;
+            if (!Number.isFinite(amount) || amount <= 0) return null;
+            const result = { name, amount };
+            // Include tags if present and valid
+            if (item.tags && Array.isArray(item.tags)) {
+                const validTags = [...new Set(
+                    item.tags
+                        .map(tag => normalizeText(tag, 20).toLowerCase())
+                        .filter(tag => tag.length > 0)
+                )].slice(0, 5);
+                if (validTags.length > 0) {
+                    result.tags = validTags;
+                }
+            }
+            return result;
+        }
+
+        // Handle file upload
+        function handleFile(file) {
+            const isJsonFile = /\.json$/i.test(file.name) || file.type === 'application/json';
+            if (!isJsonFile) {
+                showToast('Please upload a JSON file', 'error');
+                return;
+            }
+
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = (e) => {
                 try {
-                    const text = String(e.target.result || '').replace(/^\uFEFF/, '');
-                    financeData = normalizeData(JSON.parse(text));
-                    renderDashboard();
+                    const data = JSON.parse(e.target.result);
+                    
+                    // Validate data structure and sanitize items
+                    if (data.income && Array.isArray(data.income) &&
+                        data.bills && Array.isArray(data.bills) &&
+                        data.savings && Array.isArray(data.savings)) {
+                        
+                        state = {
+                            income: data.income.map(validateItem).filter(Boolean),
+                            bills: data.bills.map(validateItem).filter(Boolean),
+                            savings: data.savings.map(validateItem).filter(Boolean)
+                        };
+                        renderAllTables();
+                        showDashboard();
+                        showToast('Data imported');
+                    } else {
+                        throw new Error('Invalid data structure');
+                    }
                 } catch (err) {
-                    console.error(err);
-                    alert('Invalid JSON file');
+                    showToast('Invalid JSON file', 'error');
                 }
             };
             reader.readAsText(file);
         }
 
-        function createFreshSheet() {
-            financeData = createEmptyData();
-            document.getElementById('fileInput').value = '';
-            document.getElementById('fileInfo').textContent = 'New sheet';
-            renderDashboard();
+        // Show dashboard
+        function showDashboard() {
+            landing.style.display = 'none';
+            dashboard.style.display = 'block';
+            renderAllTables();
         }
-        
-        function formatCurrency(amount) {
-            return '£' + (amount || 0).toLocaleString('en-GB', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
-        }
-        
-        function renderDashboard() {
-            financeData = normalizeData(financeData);
-            const totalIncome = financeData.income.reduce((s, d) => s + (d.amount || 0), 0);
-            const totalOther = financeData.other.reduce((s, d) => s + (d.amount || 0), 0);
-            const totalBills = financeData.bills.reduce((s, d) => s + (d.amount || 0), 0);
-            const totalSavingsMonthly = financeData.savings.reduce((s, d) => s + (d.amount || 0), 0);
-            const totalCurrentValue = financeData.savings.reduce((s, d) => s + (d.currentValue || 0), 0);
-            const remaining = totalIncome - totalOther - totalBills - totalSavingsMonthly;
-            
-            document.querySelector('header').setAttribute('data-date', new Date().toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' }));
-            
-            renderTable('incomeTable', financeData.income, 'income');
-            renderTable('otherTable', financeData.other, 'other');
-            renderTable('billsTable', financeData.bills, 'bills');
-            renderSavingsTable();
-            renderBreakdown(totalIncome, totalOther, totalBills, totalSavingsMonthly, totalCurrentValue, remaining);
-            
-            document.getElementById('uploadSection').style.display = 'none';
-            document.getElementById('dashboard').classList.add('active');
-        }
-        
-        function renderTable(tableId, data, type) {
-            const tbody = document.querySelector(`#${tableId} tbody`);
-            tbody.innerHTML = data.map((d, i) => `
-                <tr>
-                    <td>${escapeHtml(d.item)}</td>
-                    <td class="cell-money">${formatCurrency(d.amount)}</td>
-                    <td class="cell-day">${d.day || '-'}</td>
-                    <td class="cell-actions">
-                        <div class="action-cell">
-                            <button class="btn btn--text" onclick="editItem('${type}', ${i})">Edit</button>
-                            <button class="btn btn--text" onclick="deleteItem('${type}', ${i})">Del</button>
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
-            
-            if (data.length > 0) {
-                const total = data.reduce((s, d) => s + (d.amount || 0), 0);
-                tbody.innerHTML += `<tr class="totals-row"><td>Total</td><td class="cell-money">${formatCurrency(total)}</td><td></td><td></td></tr>`;
-            }
-        }
-        
-        function renderSavingsTable() {
-            const tbody = document.querySelector('#savingsTable tbody');
-            tbody.innerHTML = financeData.savings.map((d, i) => `
-                <tr>
-                    <td>${escapeHtml(d.item)}</td>
-                    <td class="cell-money">${formatCurrency(d.amount)}</td>
-                    <td class="cell-current">${formatCurrency(d.currentValue || 0)}</td>
-                    <td class="cell-asof">${formatShortDate(d.asOf)}</td>
-                    <td class="cell-actions">
-                        <div class="action-cell">
-                            <button class="btn btn--text" onclick="editItem('savings', ${i})">Edit</button>
-                            <button class="btn btn--text" onclick="deleteItem('savings', ${i})">Del</button>
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
-            
-            if (financeData.savings.length > 0) {
-                const total = financeData.savings.reduce((s, d) => s + (d.amount || 0), 0);
-                const totalValue = financeData.savings.reduce((s, d) => s + (d.currentValue || 0), 0);
-                tbody.innerHTML += `<tr class="totals-row"><td>Total</td><td class="cell-money">${formatCurrency(total)}</td><td class="cell-current">${formatCurrency(totalValue)}</td><td></td><td></td></tr>`;
-            }
-        }
-        
-        function renderBreakdown(income, other, bills, savingsMonthly, currentValue, remaining) {
-            const breakdownEl = document.getElementById('breakdown');
-            const asOfText = formatLongDate(financeData.asOf);
-            breakdownEl.innerHTML = `
-                <div class="breakdown-row"><span class="breakdown-label">Net Income</span><span class="breakdown-value">${formatCurrency(income)}</span></div>
-                <div class="breakdown-row"><span class="breakdown-label">Other Payments</span><span class="breakdown-value">-${formatCurrency(other)}</span></div>
-                <div class="breakdown-row"><span class="breakdown-label">Bills & Expenses</span><span class="breakdown-value">-${formatCurrency(bills)}</span></div>
-                <div class="breakdown-row"><span class="breakdown-label">Monthly Savings</span><span class="breakdown-value">-${formatCurrency(savingsMonthly)}</span></div>
-                <div class="breakdown-row" style="border-top: 1px solid var(--border); margin-top: 8px; padding-top: 16px;"><span class="breakdown-label" style="font-weight: 600;">Remaining</span><span class="breakdown-value" style="font-size: 16px;">${formatCurrency(remaining)}</span></div>
-                <div class="breakdown-row"><span class="breakdown-label">Investments <span style="color: var(--text-muted);">(as of ${asOfText})</span></span><span class="breakdown-value">${formatCurrency(currentValue)}</span></div>
-            `;
-        }
-        
-        function openModal(type, index = -1) {
-            document.getElementById('modal').classList.add('active');
-            document.getElementById('editType').value = type;
-            document.getElementById('editIndex').value = index;
-            
-            const isSavings = type === 'savings';
-            document.getElementById('amountGroup').style.display = 'block';
-            document.getElementById('dayGroup').style.display = (type === 'savings') ? 'none' : 'block';
-            document.getElementById('valueGroup').style.display = isSavings ? 'block' : 'none';
-            document.getElementById('asOfGroup').style.display = isSavings ? 'block' : 'none';
-            
-            document.querySelector('#itemAmount').previousElementSibling.textContent = isSavings ? 'Monthly Amount (£)' : 'Amount (£)';
-            
-            document.getElementById('modalTitle').textContent = index >= 0 ? 'Edit Item' : `Add ${type.charAt(0).toUpperCase() + type.slice(1)}`;
-            
-            if (index >= 0) {
-                const item = financeData[type][index];
-                document.getElementById('itemName').value = item.item;
-                document.getElementById('itemAmount').value = item.amount;
-                document.getElementById('itemDay').value = item.day || '';
-                document.getElementById('itemValue').value = item.currentValue || '';
-                document.getElementById('itemAsOf').value = item.asOf || '';
-            } else {
-                document.getElementById('itemForm').reset();
-            }
 
-            document.getElementById('itemName').focus();
+        // Start fresh
+        function startFresh() {
+            state = { income: [], bills: [], savings: [] };
+            fileInput.value = '';
+            showDashboard();
+            showToast('Fresh session started');
         }
-        
-        function closeModal() {
-            document.getElementById('modal').classList.remove('active');
+
+        // Reset dashboard
+        function resetDashboard() {
+            if (confirm('Start a new session? All data will be lost.')) {
+                landing.style.display = 'flex';
+                dashboard.style.display = 'none';
+                state = { income: [], bills: [], savings: [] };
+                fileInput.value = '';
+            }
         }
+
+        // Event listeners
+        uploadZone.addEventListener('click', () => fileInput.click());
+
+        uploadZone.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                fileInput.click();
+            }
+        });
         
-        function handleFormSubmit(e) {
+        uploadZone.addEventListener('dragover', (e) => {
             e.preventDefault();
-            const type = document.getElementById('editType').value;
-            const index = parseInt(document.getElementById('editIndex').value);
-            
-            const newItem = {
-                item: document.getElementById('itemName').value.trim(),
-                amount: parseFloat(document.getElementById('itemAmount').value) || 0,
-                day: type !== 'savings' ? parseInt(document.getElementById('itemDay').value) || null : undefined
-            };
+            uploadZone.classList.add('dragover');
+        });
 
-            if (!newItem.item) {
-                alert('Item name is required');
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('dragover');
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file) handleFile(file);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            e.target.value = '';
+            if (file) handleFile(file);
+        });
+
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) closeModal();
+        });
+
+        document.getElementById('entryForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            saveEntry();
+        });
+
+        // Tag input event listeners
+        tagInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ',') {
+                e.preventDefault();
+                addTag(tagInput.value);
+            } else if (e.key === 'Backspace' && tagInput.value === '' && currentTags.length > 0) {
+                removeTag(currentTags.length - 1);
+            }
+        });
+
+        tagInput.addEventListener('blur', () => {
+            if (tagInput.value.trim()) {
+                addTag(tagInput.value);
+            }
+        });
+
+        tagInputContainer.addEventListener('click', (e) => {
+            if (e.target.classList.contains('remove') || e.target.closest('.remove')) {
+                const index = parseInt(e.target.dataset.index || e.target.closest('.remove').dataset.index);
+                if (!isNaN(index)) {
+                    removeTag(index);
+                }
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (!modalOverlay.classList.contains('active')) return;
+
+            if (e.key === 'Escape') {
+                closeModal();
                 return;
             }
-            
-            if (type === 'savings') {
-                newItem.currentValue = parseFloat(document.getElementById('itemValue').value) || 0;
-                newItem.asOf = document.getElementById('itemAsOf').value || null;
-                financeData.asOf = newItem.asOf || financeData.asOf || null;
-            }
-            
-            if (index >= 0) {
-                financeData[type][index] = newItem;
-            } else {
-                financeData[type].push(newItem);
-            }
-            
-            closeModal();
-            renderDashboard();
-        }
-        
-        function editItem(type, index) {
-            openModal(type, index);
-        }
-        
-        function deleteItem(type, index) {
-            if (confirm('Delete this item?')) {
-                financeData[type].splice(index, 1);
-                renderDashboard();
-            }
-        }
 
-        document.getElementById('modal').addEventListener('click', function (event) {
-            if (event.target.id === 'modal') {
-                closeModal();
+            if (e.key === 'Tab') {
+                const focusable = getModalFocusableElements();
+                if (focusable.length === 0) {
+                    e.preventDefault();
+                    modal.focus();
+                    return;
+                }
+
+                const first = focusable[0];
+                const last = focusable[focusable.length - 1];
+
+                if (e.shiftKey && document.activeElement === first) {
+                    e.preventDefault();
+                    last.focus();
+                } else if (!e.shiftKey && document.activeElement === last) {
+                    e.preventDefault();
+                    first.focus();
+                }
             }
         });
 
-        document.addEventListener('keydown', function (event) {
-            if (event.key === 'Escape') {
-                closeModal();
-            }
-        });
-        
-        function exportJSON() {
-            const jsonContent = JSON.stringify(financeData, null, 2);
-            const blob = new Blob([jsonContent], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'finance_data.json';
-            a.click();
-            URL.revokeObjectURL(url);
-        }
     </script>
 </body>
 </html>
